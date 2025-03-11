@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DebateSkills - Practice</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-color: #2563EB;
+            --primary-light: #EFF6FF;
+            --success-color: #10B981;
+            --success-light: #ECFDF5;
+            --warning-color: #F59E0B;
+            --warning-light: #FFFBEB;
+            --danger-color: #EF4444;
+            --danger-light: #FEF2F2;
+            --purple-color: #8B5CF6;
+            --purple-light: #F5F3FF;
+            --dark-color: #1F2937;
+            --gray-color: #9CA3AF;
+            --light-gray: #F9FAFB;
+            --border-color: #E5E7EB;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+            color: #1F2937;
+        }
+
+        .navbar {
+            background-color: #FFFFFF;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-link {
+            color: #4B5563;
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .search-input {
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .filter-select {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: white;
+            font-size: 14px;
+            font-weight: 500;
+            height: 100%;
+        }
+
+        .topic-card {
+            background-color: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .topic-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .topic-tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--light-gray);
+            color: var(--gray-color);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-right: 8px;
+        }
+
+        .topic-tag i {
+            margin-right: 4px;
+            font-size: 12px;
+        }
+
+        .btn-start-practice {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 10px 18px;
+            border: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-start-practice:hover {
+            background-color: #1D4ED8;
+            color: white;
+        }
+
+        .btn-start-practice i {
+            margin-right: 8px;
+        }
+
+        .timer-card {
+            background-color: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-timer-start {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-timer-start i {
+            margin-right: 8px;
+        }
+
+        .btn-timer-reset {
+            background-color: var(--light-gray);
+            color: var(--dark-color);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-timer-reset i {
+            margin-right: 8px;
+        }
+
+        .tips-card {
+            background-color: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .tips-title {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .tip-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .tip-icon {
+            color: var(--success-color);
+            margin-right: 12px;
+            margin-top: 4px;
+        }
+
+        .tip-text {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .page-title {
+            font-weight: 700;
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .notification-icon {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--danger-color);
+            color: white;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">DebateSkills</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="bi bi-house-door me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">
+                            <i class="bi bi-journal-text me-1"></i> Courses
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="practice.html">
+                            <i class="bi bi-mic me-1"></i> Practice
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="community.html">
+                            <i class="bi bi-people me-1"></i> Community
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="notification-icon me-3">
+                        <i class="bi bi-bell fs-5"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar" class="user-avatar">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+        <div class="row">
+            <!-- Left Column: Debate Topics -->
+            <div class="col-lg-8">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="page-title mb-0">Practice Debate</h1>
+                    <button class="btn-start-practice">
+                        <i class="bi bi-mic-fill"></i> Start Practice
+                    </button>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <input type="text" class="search-input" placeholder="Search motions...">
+                    </div>
+                    <div class="col-md-4">
+                        <select class="filter-select w-100">
+                            <option>All Categories</option>
+                            <option>Technology</option>
+                            <option>Politics</option>
+                            <option>Education</option>
+                            <option>Environment</option>
+                            <option>Economics</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Debate Topics List -->
+                <div class="topic-card">
+                    <h3 class="topic-title">This house believes that social media has done more harm than good</h3>
+                    <div class="d-flex align-items-center">
+                        <div class="topic-tag">
+                            <i class="bi bi-cpu"></i> Technology
+                        </div>
+                        <div class="topic-tag">
+                            <i class="bi bi-clock"></i> 7 minutes
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card">
+                    <h3 class="topic-title">This house would ban private schools</h3>
+                    <div class="d-flex align-items-center">
+                        <div class="topic-tag">
+                            <i class="bi bi-book"></i> Education
+                        </div>
+                        <div class="topic-tag">
+                            <i class="bi bi-clock"></i> 7 minutes
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card">
+                    <h3 class="topic-title">This house believes that cryptocurrencies do more harm than good</h3>
+                    <div class="d-flex align-items-center">
+                        <div class="topic-tag">
+                            <i class="bi bi-currency-exchange"></i> Economics
+                        </div>
+                        <div class="topic-tag">
+                            <i class="bi bi-clock"></i> 5 minutes
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card">
+                    <h3 class="topic-title">This house supports universal basic income</h3>
+                    <div class="d-flex align-items-center">
+                        <div class="topic-tag">
+                            <i class="bi bi-cash-stack"></i> Economics
+                        </div>
+                        <div class="topic-tag">
+                            <i class="bi bi-clock"></i> 6 minutes
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Timer and Tips -->
+            <div class="col-lg-4">
+                <div class="timer-card">
+                    <h3 class="tips-title">Timer</h3>
+                    <div class="timer-display">07:00</div>
+                    <div class="timer-controls">
+                        <button class="btn-timer-start">
+                            <i class="bi bi-play-fill"></i> Start
+                        </button>
+                        <button class="btn-timer-reset">
+                            <i class="bi bi-arrow-repeat"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tips-card">
+                    <h3 class="tips-title">Quick Tips</h3>
+                    <div class="tip-item">
+                        <i class="bi bi-check-circle-fill tip-icon"></i>
+                        <div class="tip-text">Structure your argument clearly</div>
+                    </div>
+                    <div class="tip-item">
+                        <i class="bi bi-check-circle-fill tip-icon"></i>
+                        <div class="tip-text">Use evidence to support claims</div>
+                    </div>
+                    <div class="tip-item">
+                        <i class="bi bi-check-circle-fill tip-icon"></i>
+                        <div class="tip-text">Address counterarguments</div>
+                    </div>
+                    <div class="tip-item">
+                        <i class="bi bi-check-circle-fill tip-icon"></i>
+                        <div class="tip-text">Maintain confident body language</div>
+                    </div>
+                    <div class="tip-item">
+                        <i class="bi bi-check-circle-fill tip-icon"></i>
+                        <div class="tip-text">Practice effective time management</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple timer functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const timerDisplay = document.querySelector('.timer-display');
+            const startButton = document.querySelector('.btn-timer-start');
+            const resetButton = document.querySelector('.btn-timer-reset');
+            
+            let timer;
+            let timeLeft = 7 * 60; // 7 minutes in seconds
+            let isRunning = false;
+            
+            function updateDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+            
+            function startTimer() {
+                if (isRunning) {
+                    // Pause the timer
+                    clearInterval(timer);
+                    startButton.innerHTML = '<i class="bi bi-play-fill"></i> Start';
+                    isRunning = false;
+                } else {
+                    // Start the timer
+                    if (timeLeft > 0) {
+                        timer = setInterval(function() {
+                            timeLeft--;
+                            updateDisplay();
+                            
+                            if (timeLeft <= 0) {
+                                clearInterval(timer);
+                                startButton.innerHTML = '<i class="bi bi-play-fill"></i> Start';
+                                isRunning = false;
+                            }
+                        }, 1000);
+                        
+                        startButton.innerHTML = '<i class="bi bi-pause-fill"></i> Pause';
+                        isRunning = true;
+                    }
+                }
+            }
+            
+            function resetTimer() {
+                clearInterval(timer);
+                timeLeft = 7 * 60;
+                updateDisplay();
+                startButton.innerHTML = '<i class="bi bi-play-fill"></i> Start';
+                isRunning = false;
+            }
+            
+            startButton.addEventListener('click', startTimer);
+            resetButton.addEventListener('click', resetTimer);
+        });
+
+        // Make topic cards clickable
+        document.querySelectorAll('.topic-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Here you would typically handle selecting a debate topic
+                // For now, let's just add a selected class
+                document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('border-primary'));
+                this.classList.add('border-primary');
+            });
+        });
+    </script>
+</body>
+</html>
