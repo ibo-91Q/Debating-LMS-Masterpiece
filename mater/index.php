@@ -786,3 +786,260 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+<?php
+// Start session for user authentication if needed
+session_start();
+
+// Database connection details
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'education_portal');
+
+// Attempt to connect to MySQL database
+$conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+
+// Check connection
+if($conn === false){
+    die("ERROR: Could not connect. " . mysqli_connect_error());
+}
+
+// Get featured courses for homepage
+function getFeaturedCourses($conn, $limit = 6) {
+    $sql = "SELECT id, title, description, image_url, price FROM courses WHERE featured = 1 LIMIT ?";
+    
+    if($stmt = mysqli_prepare($conn, $sql)){
+        mysqli_stmt_bind_param($stmt, "i", $limit);
+        
+        if(mysqli_stmt_execute($stmt)){
+            $result = mysqli_stmt_get_result($stmt);
+            
+            $courses = array();
+            while($row = mysqli_fetch_assoc($result)){
+                $courses[] = $row;
+            }
+            
+            return $courses;
+        } else{
+            return false;
+        }
+    }
+    
+    return false;
+}
+
+// Get testimonials
+function getTestimonials($conn, $limit = 3) {
+    $sql = "SELECT name, role, content, rating FROM testimonials ORDER BY rating DESC LIMIT ?";
+    
+    if($stmt = mysqli_prepare($conn, $sql)){
+        mysqli_stmt_bind_param($stmt, "i", $limit);
+        
+        if(mysqli_stmt_execute($stmt)){
+            $result = mysqli_stmt_get_result($stmt);
+            
+            $testimonials = array();
+            while($row = mysqli_fetch_assoc($result)){
+                $testimonials[] = $row;
+            }
+            
+            return $testimonials;
+        } else{
+            return false;
+        }
+    }
+    
+    return false;
+}
+
+// Get featured courses
+$featuredCourses = getFeaturedCourses($conn);
+
+// Get testimonials
+$testimonials = getTestimonials($conn);
+
+// Page title
+$pageTitle = "Welcome to E-Learning Portal";
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $pageTitle; ?></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <?php include 'includes/header.php'; ?>
+    
+    <!-- Hero Section -->
+    <section class="hero-section py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1>Expand Your Knowledge</h1>
+                    <p class="lead">Discover top-quality courses taught by industry experts. Start your learning journey today!</p>
+                    <div class="mt-4">
+                        <a href="courses.php" class="btn btn-primary btn-lg">Browse Courses</a>
+                        <a href="register.php" class="btn btn-outline-secondary btn-lg ms-2">Sign Up</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img src="images/hero-image.jpg" alt="E-Learning" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Featured Courses Section -->
+    <section class="featured-courses py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Featured Courses</h2>
+            
+            <div class="row">
+                <?php 
+                if($featuredCourses):
+                    foreach($featuredCourses as $course): 
+                ?>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="<?php echo htmlspecialchars($course['image_url']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($course['title']); ?>">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo htmlspecialchars($course['title']); ?></h5>
+                            <p class="card-text"><?php echo htmlspecialchars(substr($course['description'], 0, 100)) . '...'; ?></p>
+                            <p class="text-primary fw-bold">$<?php echo htmlspecialchars($course['price']); ?></p>
+                            <a href="course-details.php?id=<?php echo $course['id']; ?>" class="btn btn-outline-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <?php 
+                    endforeach;
+                else:
+                ?>
+                <div class="col-12">
+                    <p class="text-center">No featured courses available at this moment.</p>
+                </div>
+                <?php endif; ?>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="courses.php" class="btn btn-primary">View All Courses</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Categories Section -->
+    <section class="categories-section py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Browse Categories</h2>
+            
+            <div class="row text-center">
+                <div class="col-md-3 mb-4">
+                    <div class="category-card p-4 rounded shadow-sm">
+                        <i class="bi bi-code-square fs-1 text-primary"></i>
+                        <h4 class="mt-3">Programming</h4>
+                        <a href="courses.php?category=programming" class="stretched-link"></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <div class="category-card p-4 rounded shadow-sm">
+                        <i class="bi bi-graph-up fs-1 text-success"></i>
+                        <h4 class="mt-3">Business</h4>
+                        <a href="courses.php?category=business" class="stretched-link"></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <div class="category-card p-4 rounded shadow-sm">
+                        <i class="bi bi-palette fs-1 text-warning"></i>
+                        <h4 class="mt-3">Design</h4>
+                        <a href="courses.php?category=design" class="stretched-link"></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <div class="category-card p-4 rounded shadow-sm">
+                        <i class="bi bi-robot fs-1 text-danger"></i>
+                        <h4 class="mt-3">AI & Data Science</h4>
+                        <a href="courses.php?category=ai-data-science" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="testimonials-section py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">What Our Students Say</h2>
+            
+            <div class="row">
+                <?php 
+                if($testimonials):
+                    foreach($testimonials as $testimonial): 
+                ?>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 p-4">
+                        <div class="testimonial-rating mb-3">
+                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                <i class="bi bi-star-fill <?php echo ($i <= $testimonial['rating']) ? 'text-warning' : 'text-muted'; ?>"></i>
+                            <?php endfor; ?>
+                        </div>
+                        <p class="card-text">"<?php echo htmlspecialchars($testimonial['content']); ?>"</p>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="testimonial-avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                <?php echo strtoupper(substr($testimonial['name'], 0, 1)); ?>
+                            </div>
+                            <div>
+                                <h6 class="mb-0"><?php echo htmlspecialchars($testimonial['name']); ?></h6>
+                                <small class="text-muted"><?php echo htmlspecialchars($testimonial['role']); ?></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php 
+                    endforeach;
+                else:
+                ?>
+                <div class="col-12">
+                    <p class="text-center">No testimonials available at this moment.</p>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section py-5 bg-primary text-white">
+        <div class="container text-center">
+            <h2 class="mb-4">Ready to Start Learning?</h2>
+            <p class="lead mb-4">Join thousands of students already learning on our platform.</p>
+            <a href="register.php" class="btn btn-light btn-lg">Sign Up Now</a>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <?php include 'includes/footer.php'; ?>
+    
+    <!-- Bootstrap JS and custom scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+
+<?php
+// Close connection
+mysqli_close($conn);
+?>
