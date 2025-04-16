@@ -362,4 +362,4 @@ echo "<br>Database setup completed!";
 
 // Close connection
 mysqli_close($conn);
-?>
+?> 
